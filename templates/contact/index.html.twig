@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Contact | EliteSports
+{% endblock %}
+
+{% block page_content %}
+	<!-- Begin page content -->
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<div class="page-title-box">
+						<div class="page-title-right"></div>
+						<h4 class="page-title">Contacts</h4>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="header-title">Liste Contacts</h4>
+							<hr/>
+							<table id="contact_datatable" class="table table-striped dt-responsive nowrap w-100"></table>
+						</div>
+						<!-- end card-body -->
+					</div>
+					<!-- end card -->
+				</div>
+				<!-- end col -->
+			</div>
+		</div>
+	</div>
+
+	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	 <script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/datatables.min.js"></script>
+	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	 <script>
+				$(document).ready(function () { // recuperer la liste des categorie au chargement de la page
+		fetchAllContact();
+		});
+		
+		var contactDataTable;
+		
+		// Fonction pour récupérer la liste des licencié
+		function fetchAllContact() {
+		$.ajax({
+		url: '{{ path('app_contact_getAll') }}',
+		type: 'GET',
+		dataType: 'json',
+		success: function (data) {
+		if (data.success) {
+		
+		if ($.fn.DataTable.isDataTable('#contact_datatable')) {
+		contactDataTable.destroy();
+		}
+		
+		contactDataTable = $('#contact_datatable').DataTable({
+		data: data.liste_contacts,
+		columns: [
+		{
+		data: 'contact.contact_nom',
+		title: 'Contact Nom'
+		},
+		{
+		data: 'contact.contact_prenom',
+		title: 'Contact Prenom'
+		},
+		{
+		data: 'contact.contact_email',
+		title: 'Contact Email'
+		},
+		{
+		data: 'categorie.categorie_nom',
+		title: 'Catégorie'
+		}, 
+		{
+		data: 'contact.contact_telephone',
+		title: 'Téléphone'
+		}, 
+		],
+		language: {
+		// Textes pour la pagination
+		paginate: {
+		first: 'Premier',
+		previous: 'Précédent',
+		next: 'Suivant',
+		last: 'Dernier'
+		},
+		// Textes pour l'affichage des informations
+		info: 'Affichage de _START_ à _END_ sur _TOTAL_ entrées',
+		// Texte pour le champ de recherche
+		search: 'Rechercher :',
+		// Textes pour la longueur de la page
+		lengthMenu: 'Afficher _MENU_ ',
+		// Texte lorsque la table est vide
+		emptyTable: 'Aucune donnée disponible dans le tableau',
+		// Texte lorsque les données sont en cours de chargement
+		loadingRecords: 'Chargement...',
+		// Texte lorsque la recherche ne trouve aucune correspondance
+		zeroRecords: 'Aucun enregistrement trouvé',
+		// Textes pour la sélection des colonnes
+		select: {
+		rows: {
+		_: '%d lignes sélectionnées',
+		0: 'Aucune ligne sélectionnée',
+		1: '1 ligne sélectionnée'
+		}
+		}
+		}
+		});
+
+		           // Ajouter le filtre de catégorie (select) pour la colonne Catégorie
+	            contactDataTable.columns(3).every(function () {
+	              var column = this
+	    
+	              // Créer le label
+	              var label = $('<label for="categorieFilter" class="ms-4">Catégorie : </label>').appendTo('#contact_datatable_wrapper .dataTables_length')
+	    
+	              // Créer le Select
+	              var select = $('<select id="categorieFilter"><option value=""></option></select>').appendTo('#contact_datatable_wrapper .dataTables_length')
+	    
+	              column
+	                .data()
+	                .unique()
+	                .sort()
+	                .each(function (d, j) {
+	                  select.append('<option value="' + d + '">' + d + '</option>')
+	                })
+	    
+	              // Appliquer le filtre lorsqu'une catégorie est sélectionnée dans le sélecteur
+	              select.on('change', function () {
+	                var val = $.fn.dataTable.util.escapeRegex($(this).val())
+	                column.search(val ? '^' + val + '$' : '', true, false).draw()
+	              })
+	            })
+		} else {
+		alert(data.message);
+		}
+		},
+		error: function (xhr, status, error) {
+		alert('Erreur AJAX : ' + error);
+		}
+		});
+		}
+			</script>
+	<!-- content -->
+	<!-- END page content -->
+{% endblock %}

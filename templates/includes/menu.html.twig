@@ -1,0 +1,159 @@
+<!-- ========== Left Sidebar Start ========== -->
+<div
+	class="leftside-menu">
+
+	<!-- Brand Logo Light -->
+	<a href="index.html" class="logo logo-light">
+		<span class="logo-lg">
+			<img src="{{ asset('assets/images/logo.jpg') }}" style="width: 14rem; height: 4rem; object-fit: cover" alt="logo">
+		</span>
+		
+	</a>
+
+	<!-- Brand Logo Dark -->
+	<a href="index.html" class="logo logo-dark">
+		<span class="logo-lg">
+			<img src="assets/images/logo-dark.png" alt="dark logo">
+		</span>
+		<span class="logo-sm">
+			<img src="assets/images/logo-dark-sm.png" alt="small logo">
+		</span>
+	</a>
+
+	<!-- Sidebar Hover Menu Toggle Button -->
+	<div class="button-sm-hover" data-bs-toggle="tooltip" data-bs-placement="right" title="Show Full Sidebar">
+		<i class="ri-checkbox-blank-circle-line align-middle"></i>
+	</div>
+
+	<!-- Full Sidebar Menu Close Button -->
+	<div class="button-close-fullsidebar">
+		<i class="ri-close-fill align-middle"></i>
+	</div>
+
+	<!-- Sidebar -left -->
+	<div
+		class="h-100" id="leftside-menu-container" data-simplebar>
+		<!-- Leftbar User -->
+		<div class="leftbar-user">
+			<a href="pages-profile.html">
+				<img src="assets/images/users/avatar-1.jpg" alt="user-image" height="42" class="rounded-circle shadow-sm">
+				<span class="leftbar-user-name mt-2">Dominic Keller</span>
+			</a>
+		</div>
+
+		<!--- Sidemenu -->
+		<ul class="side-nav">
+
+			<li class="side-nav-title">Navigation</li>
+
+			<li class="side-nav-item">
+				<a href="{{ path('app_dashboard') }}" class="side-nav-link">
+					<i class='bx bx-home-alt'></i>
+					<span>
+						Tableau de bord
+					</span>
+				</a>
+				
+			</li>
+
+			<li class="side-nav-title">Apps</li>
+
+	
+
+
+
+
+			<li class="side-nav-item">
+				<a data-bs-toggle="collapse" href="#sidebarEcommerce" aria-expanded="false" aria-controls="sidebarEcommerce" class="side-nav-link">
+					<i class='bx bx-chalkboard'></i>
+					<span>
+						Educateurs
+					</span>
+
+					<i class='bx bx-chevron-down'></i>
+				</a>
+				<div class="collapse" id="sidebarEcommerce">
+					<ul class="side-nav-second-level">
+					
+						<li>
+							<a href="{{ path('app_educateur')}}">
+								<i class='bx bx-list-ol'></i>
+								<span>
+									Liste des éducateurs
+								</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ path('app_mail_edu') }}">
+								<i class='bx bx-envelope'></i>
+								<span>
+									Mail à un éducateur
+								</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+			<li class="side-nav-item">
+				<a  href="{{ path('app_licencie') }}"  class="side-nav-link">
+					<i class='bx bx-football'></i>
+
+					<span>
+						Licenciés
+					</span>
+
+				</a>
+			</li>
+			<li class="side-nav-item">
+				<a data-bs-toggle="collapse" href="#sidebarContact" aria-expanded="false" aria-controls="sidebarContact" class="side-nav-link">
+					<i class='bx bxs-contact' ></i>
+
+					<span>
+						Contacts
+					</span>
+
+					<i class='bx bx-chevron-down'></i>
+				</a>
+				<div class="collapse" id="sidebarContact">
+					<ul class="side-nav-second-level">
+				
+						<li>
+							<a href="{{ path('app_contact') }}">
+								<i class='bx bx-list-ol'></i>
+								<span>
+									Liste des contacts
+								</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class='bx bx-envelope'></i>
+								<span>
+									Mail à un contact
+								</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+			<li class="side-nav-item">
+				<a  href="{{ path('app_categorie') }}"  class="side-nav-link">
+					<i class='bx bx-category' ></i>
+
+					<span>
+						Catégories
+					</span>
+
+					
+				</a>
+	
+			</li>
+
+
+		</ul>
+		<!--- End Sidemenu -->
+
+		<div class="clearfix"></div>
+	</div>
+</div>
+<!-- ========== Left Sidebar End ========== -->

@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Catégories | EliteSports
+{% endblock %}
+
+{% block page_content %}
+	<!-- Begin page content -->
+	<div class="content">
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success mt-4">{{ message }}</div>
+		{% endfor %}
+
+		{% for message in app.flashes('error') %}
+			<div class="alert alert-danger mt-4">{{ message }}</div>
+		{% endfor %}
+		<!-- Start Content -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<div class="page-title-box">
+						<div class="page-title-right"></div>
+						<h4 class="page-title">Catégorie</h4>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="header-title">Liste Catégories</h4>
+							<hr/>
+
+							<table id="categorie_datatable" class="table dt-responsive nowrap w-100"></table>
+						</div>
+						<!-- end card-body -->
+					</div>
+					<!-- end card -->
+				</div>
+				<!-- end col -->
+			</div>
+		</div>
+
+		<!-- container -->
+	</div>
+	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	 <script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/datatables.min.js"></script>
+{% endblock %}
+
+{% block javascripts %}
+	 <script>
+	    // À l'extérieur de la fonction document.ready, déclarez la variable globale
+	    var categorieDatatable
+	    
+	    $(document).ready(function () {
+	      // récupérer la liste des catégories au chargement de la page
+	      fetchAllLicencies()
+	    })
+	    
+	    // Fonction pour récupérer la liste des catégories
+	    function fetchAllLicencies() {
+	      $.ajax({
+	        url: '{{ path("app_categorie_get_all") }}',
+	        type: 'GET',
+	        dataType: 'json',
+	        success: function (data) {
+	          if (data.success) {
+	            // Détruire la DataTable existante si elle existe
+	            if ($.fn.DataTable.isDataTable('#categorie_datatable')) {
+	              categorieDatatable.destroy()
+	            }
+	            // console.log(data.liste_licencies)
+	    
+	            // Initialiser DataTables avec le plugin Select
+	            var categorieDatatable = $('#categorie_datatable').DataTable({
+	              data: data.liste_categories,
+	              columns: [
+	                {
+	                  data: 'code',
+	                  title: 'Code'
+	                },
+	                {
+	                  data: 'nom',
+	                  title: 'Nom'
+	                },
+	             
+	         
+	            
+	              ],
+	              language: {
+	                // Textes pour la pagination
+	                paginate: {
+	                  first: 'Premier',
+	                  previous: 'Précédent',
+	                  next: 'Suivant',
+	                  last: 'Dernier'
+	                },
+	                // Textes pour l'affichage des informations
+	                info: 'Affichage de _START_ à _END_ sur _TOTAL_ entrées',
+	                // Texte pour le champ de recherche
+	                search: 'Rechercher :',
+	                // Textes pour la longueur de la page
+	                lengthMenu: 'Afficher _MENU_ ',
+	                // Texte lorsque la table est vide
+	                emptyTable: 'Aucune donnée disponible dans le tableau',
+	                // Texte lorsque les données sont en cours de chargement
+	                loadingRecords: 'Chargement...',
+	                // Texte lorsque la recherche ne trouve aucune correspondance
+	                zeroRecords: 'Aucun enregistrement trouvé',
+	                // Textes pour la sélection des colonnes
+	                select: {
+	                  rows: {
+	                    _: '%d lignes sélectionnées',
+	                    0: 'Aucune ligne sélectionnée',
+	                    1: '1 ligne sélectionnée'
+	                  }
+	                }
+	              }
+	            })
+	    
+	
+	          } else {
+	            // Afficher un message d'erreur si la récupération a échoué
+	            alert(data.message)
+	          }
+	        },
+	        error: function (xhr, status, error) {
+	          // Gérer les erreurs lors de la requête AJAX
+	          alert('Erreur AJAX : ' + error)
+	        }
+	      })
+	    }
+	    
+	    function voir(id) {
+	    $.ajax({
+	        type: "GET",
+	        url: "/licences/" + id,  
+	        success: function(result) {
+	            var donnees = result;
+				console.log(donnees)
+	            if (donnees['success'] && donnees['licence'] !== null) {
+	                let licencie = donnees['licence'];
+	                let contact = donnees['licence']['contact'];
+	                let categorie = donnees['licence']['categorie'];
+	
+	                // les informations dans le modal-body
+					$('#titre_modal').text('Détails du Licencié')
+	                $('#modal-detail .modal-body').html(`
+						<h6 class="mt-0">Informations du licencié</h6>
+	                    <p>Nom: ${licencie.nom}</p>
+	                    <p>Prénom: ${licencie.prenom}</p>
+	                    <p>Catégorie: ${categorie.categorie_nom}</p>
+						<hr>
+						<h6 class="mt-0">Informations de son contact</h6>
+	                    <p>Email: ${contact.contact_email}</p>
+	                    <p>Téléphone: ${contact.contact_telephone}</p>
+	                `);
+	
+	                // Afficher le modal
+	                $('#modal-detail').modal('show');
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            // Gérer les erreurs lors de la requête AJAX
+	            alert('Erreur AJAX : ' + error);
+	        }
+	    });
+	}
+	
+	  </script>
+{% endblock %}

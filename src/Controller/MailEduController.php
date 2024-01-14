@@ -19,6 +19,38 @@ class MailEduController extends AbstractController
     #[Route('/mail/edu', name: 'app_mail_edu')]
     public function index(Request $request, EntityManagerInterface $manager, MailerInterface $mailer,Connection $connection): Response
     {
+
+        //recuperer tous mes mails 
+
+        $sql = 'SELECT
+        me.message ,
+        me.date_envoi,
+        me.objet,
+        e.nom,
+        e.prenom        
+     FROM mail_edu me
+      JOIN educateur e ON e.numero = me.id_educateur
+';
+$donnees = $connection->fetchAllAssociative($sql);
+
+$formattedEmailEducateur = [];
+
+foreach ($donnees as $data) {
+ // Formatez les données comme vous le souhaitez
+ $formattedEmailEducateur[] = [
+     'message' => $data['message'],
+     'date' => new \DateTime($data['date_envoi']), 
+     'objet' => $data['objet'],
+     'educateur' => [
+         'nom' => $data['nom'],
+         'prenom' => $data['prenom'],
+     ],
+     // ... autres propriétés
+ ];
+}
+//
+
+
         $mailEdu = new MailEdu(); // Créez une nouvelle instance de l'entité MailEdu
         $form = $this->createForm(MailEduFormType::class, $mailEdu);
         $form->handleRequest($request);
@@ -57,39 +89,13 @@ class MailEduController extends AbstractController
                 'error', "Ce email n'existe pas dans les emails des contacts."
             );
             return $this->render('educateur/email.html.twig', [
-                'form' => $form->createView(),
+                'form' => $form->createView(),'emails'=>$formattedEmailEducateur
             ]);
         }
        
         }
 
-        $sql = 'SELECT
-        me.message ,
-        me.date_envoi,
-        me.objet,
-        e.nom,
-        e.prenom        
-     FROM mail_edu me
-      JOIN educateur e ON e.numero = me.id_educateur
-';
-$donnees = $connection->fetchAllAssociative($sql);
-
-$formattedEmailEducateur = [];
-
-foreach ($donnees as $data) {
- // Formatez les données comme vous le souhaitez
- $formattedEmailEducateur[] = [
-     'message' => $data['message'],
-     'date' => new \DateTime($data['date_envoi']), 
-     'objet' => $data['objet'],
-     'educateur' => [
-         'nom' => $data['nom'],
-         'prenom' => $data['prenom'],
-     ],
-     // ... autres propriétés
- ];
-}
-
+      
         return $this->render('educateur/email.html.twig', [
             'form' => $form->createView(),'emails'=>$formattedEmailEducateur
         ]);

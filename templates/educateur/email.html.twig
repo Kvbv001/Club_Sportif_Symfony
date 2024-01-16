@@ -6,6 +6,8 @@
 
 {% block stylesheets %}
 	<link href="{{asset('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+
 {% endblock %}
 
 {% block page_content %}
@@ -45,14 +47,12 @@
 
 								<div class="email-menu-list mt-3">
 									<a href="javascript: void(0);" class="text-success fw-bold">
-										<i class="ri-inbox-line me-2"></i>Messagerie<span class="badge badge-danger-lighten float-end ms-2">7</span>
+										<i class="ri-inbox-line me-2"></i>Messagerie<span class="badge badge-danger-lighten float-end ms-2">{{emails|length}}</span>
 									</a>
 
 
-									<a href="javascript: void(0);">
-										<i class="ri-mail-send-line me-2"></i>Envoyer Mail</a>
-									<a href="javascript: void(0);">
-										<i class="ri-delete-bin-line me-2"></i>Trash</a>
+									<a href="javascript: void(0);"></a>
+									<a href="javascript: void(0);"></a>
 									<a href="javascript: void(0);"></div>
 
 
@@ -79,12 +79,13 @@
 												<li class="unread">
 													<div class="email-sender-info">
 
-														<a href="javascript: void(0);" class="email-title">{{ email.educateur.nom }}
+														<a href="{{path('app_educateur_email_read', {'id': email.id})}}" class="email-title">{{ email.educateur.nom }}
 															{{ email.educateur.prenom }}</a>
 													</div>
 													<div class="email-content">
-														<a href="javascript: void(0);" class="email-subject">{{email.objet}}
-															you a direct message on Twitter! &nbsp;&ndash;&nbsp;
+														<a href="{{path('app_educateur_email_read', {'id': email.id})}};" class="email-subject">{{ email.educateur.prenom }}
+															{{email.objet}}
+															&nbsp;&ndash;&nbsp;
 															<span>{{ email.message}}</span>
 														</a>
 														<div class="email-date">{{ email.date|date('H:i', 'UTC') }}</div>
@@ -92,25 +93,12 @@
 													<div class="email-action-icons">
 														<ul class="list-inline">
 															<li class="list-inline-item">
-																<a href="javascript: void(0);">
-																	<i class="mdi mdi-archive email-action-icons-item"></i>
-																</a>
-															</li>
-															<li class="list-inline-item">
-																<a href="javascript: void(0);">
+																<a href="{{path('app_educateur_email_delete' , {'id': email.id})}}">
 																	<i class="mdi mdi-delete email-action-icons-item"></i>
 																</a>
 															</li>
-															<li class="list-inline-item">
-																<a href="javascript: void(0);">
-																	<i class="mdi mdi-email-open email-action-icons-item"></i>
-																</a>
-															</li>
-															<li class="list-inline-item">
-																<a href="javascript: void(0);">
-																	<i class="mdi mdi-clock email-action-icons-item"></i>
-																</a>
-															</li>
+
+															<li class="list-inline-item"></li>
 														</ul>
 													</div>
 												</li>
@@ -193,42 +181,7 @@
 
 									{# Fin du formulaire #}
 									{{ form_end(form) }}
-
-
-									{#	<form action="{{ path('app_mail_edu') }}" method='POST'>
-																																																							<div class="mb-2">
-																																																								<label for="msgto" class="form-label">à</label>
-																																																								<input
-																																																								type="text" id="msgto" name="msgto" class="form-control" placeholder="Example@email.com">
-																																																							{# <select class="form-control select2" data-toggle="select2">
-																																																							                    <option>Select</option>
-																																																							                    <option value="AK">Alaska</option>
-																																																							                    <option value="HI">Hawaii</option>
-																																																							
-																																																							                    <option value="CA">California</option>
-																																																							                    <option value="NV">Nevada</option>
-																																																							                    <option value="OR">Oregon</option>
-																																																							                    <option value="WA">Washington</option>
-																																																							                </select> 
-																																																							</div>
-																																																							<div class="mb-2">
-																																																								<label for="objet" class="form-label">Objet</label>
-																																																								<input type="text" id="objet" name="objet" class="form-control" placeholder="Your subject">
-																																																							</div>
-																																																							<div class="row mb-3">
-																																																								<label class="form-label" for="message">Message</label>
-																																																								<div class="col-12">
-																																																									<textarea id="simplemde1" name="message" rows="3" style="width: 100%;"></textarea>
-																																																								</div>
-																																																							</div>
-																																																							<div class="px-3 pb-3">
-																																																								<button type="submit" name="envoyer" class="btn btn-primary">
-																																																									<i class='bx bx-send'></i>
-																																																									Envoyer le Message
-																																																								</button>
-																																																								<button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
-																																																							</div>
-																																																						</form> #}
+									{#	<form action="{{ path('app_mail_edu') }}" method='POST'>																																																																<div class="mb-2">																																													</form> #}
 								</div>
 							</div>
 						</div>

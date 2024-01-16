@@ -38,87 +38,130 @@
 	</div>
 
 
+
 	 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	 <script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/datatables.min.js"></script>
 	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	 <script>
-					        $(document).ready(function() {
-					            // recuperer la liste des categorie au chargement de la page
-					            fetchAllEducateur();
-					        });
-					
-					        var educateurDataTable;
-					
-					        // Fonction pour récupérer la liste des licencié
-					        function fetchAllEducateur() {
-					    $.ajax({
-					        url: '{{ path('app_educateur_getAll') }}',
-					        type: 'GET',
-					        dataType: 'json',
-					        success: function(data) {
-					            if (data.success) {
-					
-					                if ($.fn.DataTable.isDataTable('#educateur_datatable')) {
-					                    educateurDataTable.destroy();
-					                }
-					
-					                educateurDataTable = $('#educateur_datatable').DataTable({
-					                    data: data.liste_educateur,
-					                    columns: [
-					                        { data: 'nom', title: 'Nom' },
-					                        { data: 'prenom', title: 'Prenom' },
-					                        { data: 'email', title: 'Email' },
-					                            {
-												title: 'Actions',
-												data: null,
-												render: function (data, type, row) {
-													// Ajouter des icônes d'action pour chaque ligne
-													return '<button type="button" class="text-success btn"  title="Voir Détail"  onclick="voir(' + row.numeroLicence + ')"><i class="bx bx-show font-22"></i></button>'
-												}
-												}
-					                    ],
-										 language: {
-			                // Textes pour la pagination
-			                paginate: {
-			                  first: 'Premier',
-			                  previous: 'Précédent',
-			                  next: 'Suivant',
-			                  last: 'Dernier'
-			                },
-			                // Textes pour l'affichage des informations
-			                info: 'Affichage de _START_ à _END_ sur _TOTAL_ entrées',
-			                // Texte pour le champ de recherche
-			                search: 'Rechercher :',
-			                // Textes pour la longueur de la page
-			                lengthMenu: 'Afficher _MENU_ ',
-			                // Texte lorsque la table est vide
-			                emptyTable: 'Aucune donnée disponible dans le tableau',
-			                // Texte lorsque les données sont en cours de chargement
-			                loadingRecords: 'Chargement...',
-			                // Texte lorsque la recherche ne trouve aucune correspondance
-			                zeroRecords: 'Aucun enregistrement trouvé',
-			                // Textes pour la sélection des colonnes
-			                select: {
-			                  rows: {
-			                    _: '%d lignes sélectionnées',
-			                    0: 'Aucune ligne sélectionnée',
-			                    1: '1 ligne sélectionnée'
-			                  }
-			                }
-			              }
-					                });
-					            } else {
-					                alert(data.message);
-					            }
-					        },
-					        error: function(xhr, status, error) {
-					            alert('Erreur AJAX : ' + error);
-					        }
-					    });
-					}
-					
-					    </script>
+{% endblock %}
+{% block javascripts %}	
+	<script>
+						        $(document).ready(function() {
+						            // recuperer la liste des categorie au chargement de la page
+						            fetchAllEducateur();
+						        });
+						
+						        var educateurDataTable;
+						
+						        // Fonction pour récupérer la liste des licencié
+						        function fetchAllEducateur() {
+						    $.ajax({
+						        url: '{{ path('app_educateur_getAll') }}',
+						        type: 'GET',
+						        dataType: 'json',
+						        success: function(data) {
+						            if (data.success) {
+						
+						                if ($.fn.DataTable.isDataTable('#educateur_datatable')) {
+						                    educateurDataTable.destroy();
+						                }
+						
+						                educateurDataTable = $('#educateur_datatable').DataTable({
+						                    data: data.liste_educateur,
+						                    columns: [
+						                        { data: 'nom', title: 'Nom' },
+						                        { data: 'prenom', title: 'Prenom' },
+						                        { data: 'email', title: 'Email' },
+						                            {
+													title: 'Actions',
+													data: null,
+													render: function (data, type, row) {
+														// Ajouter des icônes d'action pour chaque ligne
+														return '<button type="button" class="text-success btn"  title="Voir Détail"  onclick="voir(' + row.numero + ')"><i class="bx bx-show font-22"></i></button>'
+													}
+													}
+						                    ],
+											 language: {
+				                // Textes pour la pagination
+				                paginate: {
+				                  first: 'Premier',
+				                  previous: 'Précédent',
+				                  next: 'Suivant',
+				                  last: 'Dernier'
+				                },
+				                // Textes pour l'affichage des informations
+				                info: 'Affichage de _START_ à _END_ sur _TOTAL_ entrées',
+				                // Texte pour le champ de recherche
+				                search: 'Rechercher :',
+				                // Textes pour la longueur de la page
+				                lengthMenu: 'Afficher _MENU_ ',
+				                // Texte lorsque la table est vide
+				                emptyTable: 'Aucune donnée disponible dans le tableau',
+				                // Texte lorsque les données sont en cours de chargement
+				                loadingRecords: 'Chargement...',
+				                // Texte lorsque la recherche ne trouve aucune correspondance
+				                zeroRecords: 'Aucun enregistrement trouvé',
+				                // Textes pour la sélection des colonnes
+				                select: {
+				                  rows: {
+				                    _: '%d lignes sélectionnées',
+				                    0: 'Aucune ligne sélectionnée',
+				                    1: '1 ligne sélectionnée'
+				                  }
+				                }
+				              }
+						                });
+						            } else {
+						                alert(data.message);
+						            }
+						        },
+						        error: function(xhr, status, error) {
+						            alert('Erreur AJAX : ' + error);
+						        }
+						    });
+						}
+						
+	
+	
+	 function voir(id) {
+		    $.ajax({
+		        type: "GET",
+		        url: "/educateur/" + id,  
+		        success: function(result) {
+		            var donnees = result;
+					console.log(donnees)
+		            if (donnees['success'] && donnees['educateur'] !== null) {
+		                let educateur = donnees['educateur'];
+		                let contact = donnees['educateur']['contact'];
+		                let categorie = donnees['educateur']['categorie'];
+		
+		                // les informations dans le modal-body
+						$('#titre_modal').text('Détail Educateur')
+		                $('#modal-detail .modal-body').html(`
+							<h6 class="mt-0">Informations du Educateur</h6>
+		                    <p>Nom: ${educateur.nom}</p>
+		                    <p>Prénom: ${educateur.prenom}</p>
+							<p>Email: ${educateur.email}</p>
+							<hr>
+		                    <p>Catégorie: ${categorie.categorie_nom}</p>
+							<hr>
+							<h6 class="mt-0">Informations de son contact</h6>
+		                    <p>Email Contact: ${contact.contact_email}</p>
+		                    <p>Téléphone Contact: ${contact.contact_telephone}</p>
+		                `);
+		
+		                // Afficher le modal
+		                $('#modal-detail').modal('show');
+		            }
+		        },
+		        error: function(xhr, status, error) {
+		            // Gérer les erreurs lors de la requête AJAX
+		            alert('Erreur AJAX : ' + error);
+		        }
+		    });
+		}
+		
+						    </script>
 
 	<!-- content -->
 	<!-- END page content -->

@@ -25,6 +25,7 @@ class MailContactController extends AbstractController
         $sql = 'SELECT
         mc.message ,
         mc.date_envoi,
+        mc.id,
         mc.objet,
         c.nom,
         c.prenom        
@@ -41,6 +42,7 @@ foreach ($donnees as $data) {
      'message' => $data['message'],
      'date' => new \DateTime($data['date_envoi']), 
      'objet' => $data['objet'],
+     'id' => $data['id'],
      'contact' => [
          'nom' => $data['nom'],
          'prenom' => $data['prenom'],
@@ -101,6 +103,38 @@ foreach ($donnees as $data) {
         ]);
     }
 
- 
+
+    #[Route('/contact/email/read/{id}', name: 'app_contact_email_read')]
+    public function readEmail($id, EntityManagerInterface $entityManager, Connection $connection): Response
+    {
+        $contact = $entityManager->getRepository(MailContact::class)->find($id);
+        $sql = 'SELECT * FROM contact where idContact =:idContact';
+
+        $donnees = $connection->fetchAllAssociative($sql, ['idContact' => $contact->getContactId()]);
+        return $this->render('contact/read_email.html.twig', ['contact_email' => $contact, 'donnees' => $donnees[0]]);
+    }
+
+
+    #[Route('/contact/email/delete/{id}', name: 'app_contact_email_delete')]
+    public function deleteEmail($id, EntityManagerInterface $entityManager)
+    {
+        // Charger l'entité à partir de la base de données
+        $email = $entityManager->getRepository(MailContact::class)->find($id);
+        if (!$email) {
+            // Gérer le cas où l'entité n'est pas trouvée
+            $this->addFlash('errors', 'Aucune email retrouvé');
+            return $this->redirectToRoute('app_mail_edu');
+        }
+
+        // Supprimer l'entité
+        $entityManager->remove($email);
+        $entityManager->flush();
+
+        // Ajouter un message flash pour confirmer la suppression (facultatif)
+        $this->addFlash('success', 'Email supprimé avec succès');
+
+        // Rediriger vers une autre page (par exemple, la liste des emails)
+        return $this->redirectToRoute('app_mail_edu');
+    }
 
 }

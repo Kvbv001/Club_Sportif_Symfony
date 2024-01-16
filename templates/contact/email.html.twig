@@ -79,12 +79,12 @@
 												<li class="unread">
 													<div class="email-sender-info'">
 
-														<a href="javascript: void(0);" class="email-title">{{ email.contact.nom }}
+														<a href="{{path('app_contact_email_read', {'id': email.id})}}" class="email-title">{{ email.contact.nom }}
 															{{ email.contact.prenom }}</a>
 													</div>
 													<div class="email-content">
-														<a href="javascript: void(0);" class="email-subject">{{email.objet}}
-															you a direct message on Twitter! &nbsp;&ndash;&nbsp;
+														<a href="{{path('app_contact_email_read', {'id': email.id})}}" class="email-subject">{{email.objet}}
+															 &nbsp;&ndash;&nbsp;
 															<span>{{ email.message}}</span>
 														</a>
 														<div class="email-date">{{ email.date|date('H:i', 'UTC') }}</div>
